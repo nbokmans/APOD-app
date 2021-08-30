@@ -8,17 +8,11 @@ app.get('/', (req, res) => {
     res.send('Hello world!');
 });
 
-app.get('/apod/:date', async (req, res) => {
+app.get('/apod/:date?', async (req, res) => {
     const { date = '' } = req.params;
     const result = await getApodData({
+        mode: 'day',
         date
-    });
-    res.send(result);
-});
-
-app.get('/apod', async (req, res) => {
-    const result = await getApodData({
-        mode: 'week',
     });
 
     res.send(result);

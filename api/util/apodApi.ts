@@ -1,6 +1,7 @@
 import fetch from 'node-fetch';
-import { format, parse, sub, add, startOfWeek } from 'date-fns';
+import { format, sub, add, startOfWeek } from 'date-fns';
 import { JSDOM } from 'jsdom';
+import { parseNoOffset } from './dateUtils';
 
 const APOD_BASE_URL = 'https://apod.nasa.gov/apod'
 const DEFAULT_APOD_OPTIONS: FetchApodDataOptions = {
@@ -34,13 +35,7 @@ export const getApodData: (options?: FetchApodDataOptions) => Promise<APODResult
     };
 
     let dates: Date[] = [];
-    let parsedStartDate = finalOptions.date instanceof Date
-        ? finalOptions.date
-        : parse(finalOptions.date, 'yyyy-MM-dd', new Date());
-
-    if (isNaN(parsedStartDate.getTime())) {
-        parsedStartDate = new Date();
-    }
+    const parsedStartDate = parseNoOffset(options.date);
 
     switch (finalOptions.mode) {
         case 'day': {
