@@ -28,16 +28,21 @@ export interface FetchApodDataOptions {
 }
 
 export const getApodData: (options?: FetchApodDataOptions) => Promise<APODResult[]> = async (options = DEFAULT_APOD_OPTIONS) => {
+    const finalOptions = {
+        ...DEFAULT_APOD_OPTIONS,
+        ...options
+    };
+
     let dates: Date[] = [];
-    let parsedStartDate = options.date instanceof Date
-        ? options.date
-        : parse(options.date, 'yyyy-MM-dd', new Date());
+    let parsedStartDate = finalOptions.date instanceof Date
+        ? finalOptions.date
+        : parse(finalOptions.date, 'yyyy-MM-dd', new Date());
 
     if (isNaN(parsedStartDate.getTime())) {
         parsedStartDate = new Date();
     }
 
-    switch (options.mode) {
+    switch (finalOptions.mode) {
         case 'day': {
             dates = [parsedStartDate];
             break;
